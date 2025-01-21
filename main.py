@@ -19,7 +19,7 @@ RECEIVERS = {int(user) for user in os.getenv("RECEIVERS").split(",")}
 shutdown_event = asyncio.Event()
 
 redis = Redis(
-    host="localhost",
+    host="redis",
     port=6379,
     db=0,
     username=os.getenv("REDIS_USERNAME"),
@@ -53,11 +53,11 @@ async def periodic_task() -> None:
                     msg = pickle.loads(msg)
                     LOGGER.info(f"Retranslate message: {msg.as_pretty_string()}")
                     for receiver in RECEIVERS:
-                        await bot.send_message(receiver, **msg)
+                        await bot.send_message(receiver, **msg.as_kwargs())
                 except pickle.UnpicklingError:
                     LOGGER.warning(f"Couldn't unpickle message: {msg.decode('utf-8')}")
                     for receiver in RECEIVERS:
-                        await bot.send_message(receiver, msg.decode())
+                        await bot.send_message(receiver, msg.decode('utf-8'))
             await asyncio.sleep(1)
     except asyncio.CancelledError:
         LOGGER.info("Periodic task cancelled")

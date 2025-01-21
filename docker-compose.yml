@@ -1,0 +1,14 @@
+services:
+  tg_retranslator:
+    build: .
+    command: python main.py
+    networks:
+      - redis
+    volumes:
+      - ./logs:/home/nonroot/app/logs
+      - ./.env:/home/nonroot/app/.env
+
+networks:
+  redis:
+    external: true
+

@@ -1,0 +1,17 @@
+.pytest_cache/
+.venv/
+README.md
+.pre-commit-config.yaml
+.pdm-python
+__pycache__/
+.idea/
+.git/
+.env
+tests/
+logs/
+.gitignore
+.git
+
+.python-version
+LICENSE
+ruff.toml

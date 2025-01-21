@@ -4,7 +4,7 @@ from logging import Logger
 from general_utils.utils import get_base_dir
 
 
-def get_logger(name: str, with_file: bool = True) -> Logger:
+def get_logger(name: str, with_file: bool = False) -> Logger:
     log_dir = get_base_dir() / "logs"
     log_dir.mkdir(exist_ok=True, parents=True)
     log_path = log_dir / f"{name}.log"
