@@ -6,6 +6,7 @@ import pickle
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command
 from aiogram.types import Message
+from aiogram.types.link_preview_options import LinkPreviewOptions
 from aiogram.utils.formatting import Code
 from dotenv import load_dotenv
 from redis import Redis
@@ -53,11 +54,13 @@ async def periodic_task() -> None:
                     msg = pickle.loads(msg)
                     LOGGER.info(f"Retranslate message: {msg.as_pretty_string()}")
                     for receiver in RECEIVERS:
-                        await bot.send_message(receiver, **msg.as_kwargs())
+                        await bot.send_message(receiver, **msg.as_kwargs(),
+                                               link_preview_options=LinkPreviewOptions(is_disabled=True))
                 except pickle.UnpicklingError:
                     LOGGER.warning(f"Couldn't unpickle message: {msg.decode('utf-8')}")
                     for receiver in RECEIVERS:
-                        await bot.send_message(receiver, msg.decode('utf-8'))
+                        await bot.send_message(receiver, msg.decode("utf-8"),
+                                               link_preview_options=LinkPreviewOptions(is_disabled=True))
             await asyncio.sleep(1)
     except asyncio.CancelledError:
         LOGGER.info("Periodic task cancelled")
